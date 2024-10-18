@@ -3,44 +3,37 @@ from src import Node
 
 class Zone(Node.Node):
 
-    # **********
-    # Exercise 4(a)
-    # ********** 
     def __init__(self, id):
-        # add instance variables as needed
-        pass
+        super().__init__(id)
+        self.demand = {}
+        self.thruNode = True
     
-    # **********
-    # Exercise 4(b)
-    # ********** 
-    # adds the specified demand to an internal data structure for the demand from this node to the destination
     def addDemand(self, dest, dem):
-        # fill this in
-        pass
+        if dest in self.demand.keys():
+            self.demand[dest] = self.demand[dest] + dem
+        else:
+            self.demand[dest] = dem
     
     # returns the number of trips from this node to the destination
     def getDemand(self, dest):
-        # fill this in
-        return 0
+        if dest in self.demand.keys():
+            return self.demand[dest]
+        else:
+            return 0
     
-    # **********
-    # Exercise 4(c)
-    # ********** 
-    # returns the total number of outgoing trips from this node
     def getProductions(self):
-        # fill this in
-        return 0
     
-    # **********
-    # Exercise 4(d)
-    # ********** 
-    # returns aboolean indicating whether this node is a thru node
+        total = 0.0
+        
+        for s in self.demand.keys():
+            total += self.demand[s]
+        
+        return total
+    
     def isThruNode(self):
-        # fill this in
-        return False
+        return self.thruNode
     
     # set a boolean indicating whether this node is a thru node
     def setThruNode(self, thru):
-        # fill this in
-        pass
+        self.thruNode = thru
 

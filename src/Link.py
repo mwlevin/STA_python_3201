@@ -11,6 +11,8 @@ class Link:
         self.alpha = alpha
         self.beta = beta
         self.x = 0
+        self.xstar = 0
+        self.start.addOutgoingLink(self)
 
     # updates the flow to the given value
     def setFlow(self, x):
@@ -20,51 +22,24 @@ class Link:
         return str(self)
         
     # **********
-    # Exercise 1
+    # Exercise 1(a)
     # **********    
     def getTravelTime(self):
         t_ij = 0.0
         # fill this in
         return t_ij
         
-    # **********
-    # Exercise 2(a)
-    # **********
-    def getCapacity(self):
-        # fill this in
-        return 0
-    
-    def getFlow(self):
-        # fill this in
-        return 0
+        
+
+        
+    def __str__(self):
+        return "("+str(self.start)+", "+str(self.end)+")"
+        
+    def addXstar(self, flow):
+        self.xstar += flow
         
     # **********
     # Exercise 3(a)
-    # **********  
-    def getStart(self):
-        # fill this in
-        return None
-    
-    def getEnd(self):
-        # fill this in
-        return None
-        
-    # **********
-    # Exercise 3(c)
-    # **********   
-    def __str__(self):
-        # fill this in
-        return ""
-        
-    # **********
-    # Exercise 8(a)
-    # **********   
-    def addXstar(self, flow):
-        # fill this in
-        pass
-        
-    # **********
-    # Exercise 8(b)
     # **********   
     def calculateNewX(self, stepsize):
         # fill this in

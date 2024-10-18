@@ -7,6 +7,8 @@ class Node:
         # used for Dijkstra's implementation
         self.cost = 0.0
         self.predecessor = None
+        self.id = id
+        self.outgoing = []
         
     def __repr__(self):
         return str(self)
@@ -15,29 +17,11 @@ class Node:
     def isThruNode(self):
         return True
     
-    # **********
-    # Exercise 3(b)
-    # **********    
-    # returns the id of this node
-    def getId(self):
-        # fill this in
-        return 0
-    
-    # **********
-    # Exercise 3(c)
-    # **********   
+  
     def __str__(self):
-        # fill this in
-        return ""
+        return str(self.id)
     
-    # **********
-    # Exercise 3(d)
-    # **********    
     # adds ij to list of outgoing links
     def addOutgoingLink(self, ij):
-        # fill this in
-        pass
-        
-    # returns a list of links containing the outgoing links of this node
-    def getOutgoing(self):
-        return self.outgoing
+        if ij.start == self:
+            self.outgoing.append(ij)

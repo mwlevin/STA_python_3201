@@ -17,6 +17,23 @@ class Path:
     def __str__(self):
         return str(self.links)
     
+    
+        
+    # returns True if this path represents a connected list of links, or False otherwise
+    def isConnected(self):
+        for x in range(1, len(self.links)):
+            if self.links[x].start != self.links[x - 1].end:
+                return False
+        return True
+    
+    # returns the origin node of this path
+    def getSource(self):
+        return self.links[0].start
+    
+    # returns the destination node of this path
+    def getDest(self):
+        return self.links[-1].end
+        
     # **********
     # Exercise 6(a)
     # **********   
@@ -25,23 +42,8 @@ class Path:
         # fill this in
         return 0
         
-    # returns True if this path represents a connected list of links, or False otherwise
-    def isConnected(self):
-        # fill this in
-        return False
-    
-    # returns the origin node of this path
-    def getSource(self):
-        # fill this in
-        return None
-    
-    # returns the destination node of this path
-    def getDest(self):
-        # fill this in
-        return None
-        
     # **********
-    # Exercise 8(a)
+    # Exercise 3(a)
     # **********  
     def addHstar(self, h):
         # fill this in
