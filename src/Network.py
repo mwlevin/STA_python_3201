@@ -139,7 +139,17 @@ class Network:
     def findLink(self, i, j):
         if i is None or j is None:
             return None
-
+        
+        
+        nodei = i
+        nodej = j
+        
+        if isinstance(i, int):
+            nodei = self.findNode(i)
+            
+        if isinstance(j, int):
+            nodej = self.findNode(j)
+            
         for link in i.outgoing:
             if link.end == j:
                 return link

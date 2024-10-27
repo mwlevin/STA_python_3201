@@ -20,6 +20,13 @@ class Node:
     # will be overriden in Zone class to return non-zero demand
     def getDemand(self, s):
         return 0
+      
+    # will be overriden in Zone class to return non-zero demand  
+    def addDemand(self, dest, dem):
+        pass
+        
+    def getProductions(self):
+        return 0
         
     def __str__(self):
         return str(self.id)
