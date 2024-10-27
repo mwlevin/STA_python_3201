@@ -148,7 +148,8 @@ class Network:
 
  
 
-    
+    def getDemand(self, r, s):
+        return r.getDemand(s)
 
     
 
@@ -185,10 +186,10 @@ class Network:
         output = "Iteration\tAEC\n"
 
         for iteration in range(1, max_iteration + 1):
-            self.calculateAON()
-            stepsize = self.calculateStepsize(iteration)
             
-            self.calculateNewX(stepsize)
+            # **********
+            # Exercise 3(c)
+            # ********** 
             
             output += str(iteration) + "\t" + str(self.getAEC()) + "\n"
         
@@ -228,18 +229,18 @@ class Network:
         # fill this in
         return None
         
-        
-
+    
     # **********
-    # Exercise 3(a)
-    # ********** 
-    # find the step size for the given iteration number
+    # Exercise 3(b)
+    # **********
+    # calculate the step size for given iteration
     def calculateStepsize(self, iteration):
         # fill this in
         return 0
 
+
     # **********
-    # Exercise 3(a)
+    # Exercise 3(b)
     # ********** 
     # calculate the new X for all links based on the given step size
     def calculateNewX(self, stepsize):
@@ -247,7 +248,7 @@ class Network:
         pass
 
     # **********
-    # Exercise 3(b)
+    # Exercise 3(a)
     # ********** 
     # calculate the all-or-nothing assignment
     def calculateAON(self):

@@ -110,7 +110,6 @@ Afterwards, \texttt{test()} calls the \texttt{autograde()} function, which runs 
 
 
 	
-	
 \paragraph*{Exercise 1(b)}  Open Network.py and implement the \texttt{getTSTT()} function to  return the total system travel time. The TSTT is defined as
 \begin{align}
 	TSTT = \sum_{(i,j)\in\A} x_{ij} t_{ij}(x_{ij})
@@ -295,30 +294,36 @@ The algorithm is specified below in pseudocode:
 
 % x star variable, addxstar method, and addFlow() method
 
+
+
+
 \paragraph*{Exercise 3(a)} 
 \begin{itemize}
-	\item Open Link.py. Notice that there is an instance variable to store $x^\star_{ij}$ in the \texttt{Link} class and a \texttt{addXstar()} function which adds the specified flow to the $x^\star_{ij}$ variable.
-	It will be used to implement line \ref{msa11}. 
-	
-	\item In the \texttt{Path} class, implement the \texttt{addHstar()} function which adds the specified flow to the $x^\star_{ij}$ variable of every link in the path. Use the \texttt{addXstar()} method of the \texttt{Link} class in your implementation.
-\end{itemize}
 
+	
+	\item Open Network.py. Implement the \texttt{calculateAON()} function in the \texttt{Network} class, which is the loop in lines \ref{msa6}--\ref{msa14}. 
+
+\end{itemize}
 
 
 \paragraph*{Exercise 3(b)} 
 \begin{itemize}
-	\item Open Network.py. In the \texttt{Network} class, implement the \texttt{calculateStepsize()} function, which determines the value of $\lambda$ in line \ref{msa15}. 
+	\item Open Link.py. Notice that there is an instance variable to store $x^\star_{ij}$ in the \texttt{Link} class and a \texttt{addXstar()} function which adds the specified flow to the $x^\star_{ij}$ variable.
+	It will be used to implement line \ref{msa11}. 
+	
+	
 	
 	\item Open Link.py. In the \texttt{Link} class, implement the \texttt{calculateNewX()} function, which takes as input $\lambda$ and implements lines \ref{msa17} and \ref{msa18}. 
+	
+	\item Open Network.py. In the \texttt{Network} class, implement the \texttt{calculateStepsize()} function, which determines the value of $\lambda$ in line \ref{msa15}. 
 	
 	\item Open Network.py again, and implement the \texttt{calculateNewX()} function of the \texttt{Network} class, which implements the loop in line \ref{msa16} by calling the \texttt{Link.calculateNewX()} function on every link in the network.
 \end{itemize}
 
 
+\paragraph*{Exercise 3(c)} 
 
-\paragraph*{Exercise 3(c)} Open Network.py. Implement the \texttt{calculateAON()} function in the \texttt{Network} class, which is the loop in lines \ref{msa6}--\ref{msa14}. 
-
-In the method \texttt{msa(int)} of the \texttt{Network} class, check that  the method of successive averages succeeds. I already wrote the code for you, but it's correctness depends on  the previous exercises --- \texttt{Network.calculateAON()},  \texttt{Network.calculateStepSize()}, \texttt{Link.calculateNewX()}, etc. 
+In the method \texttt{msa(int)} of the \texttt{Network} class, check that  the method of successive averages succeeds. I already wrote part of the code for you, but you need to implement the calculations per iteration by using the methods you wrote in Exercises 3(a) and 3(b).
 
 
 \vspace\baselineskip

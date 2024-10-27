@@ -34,17 +34,12 @@ class Path:
     def getDest(self):
         return self.links[-1].end
         
-    # **********
-    # Exercise 6(a)
-    # **********   
+
     # returns the travel time of this path
     def getTravelTime(self):
-        # fill this in
-        return 0
+        total = 0
+        for a in self.links:
+            total += a.getTravelTime()
+        return total
         
-    # **********
-    # Exercise 3(a)
-    # **********  
-    def addHstar(self, h):
-        # fill this in
-        pass
+    

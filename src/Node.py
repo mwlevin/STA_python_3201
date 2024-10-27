@@ -17,7 +17,10 @@ class Node:
     def isThruNode(self):
         return True
     
-  
+    # will be overriden in Zone class to return non-zero demand
+    def getDemand(self, s):
+        return 0
+        
     def __str__(self):
         return str(self.id)
     

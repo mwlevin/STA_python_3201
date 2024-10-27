@@ -35,11 +35,10 @@ class Link:
     def __str__(self):
         return "("+str(self.start)+", "+str(self.end)+")"
         
-    def addXstar(self, flow):
-        self.xstar += flow
+    
         
     # **********
-    # Exercise 3(a)
+    # Exercise 3(b)
     # **********   
     def calculateNewX(self, stepsize):
         # fill this in
