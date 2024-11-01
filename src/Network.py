@@ -201,8 +201,21 @@ class Network:
             # Exercise 3(c)
             # ********** 
             
+            
+            
+            
+            
+            # how far are we from UE?
+            aec = self.getAEC()
+            
             output += str(iteration) + "\t" + str(self.getAEC()) + "\n"
         
+        
+        print("\nlink flows after MSA")
+        for ij in self.links:
+            print("\t", ij, ij.x)
+        
+        for 
         return output
         
         
@@ -236,8 +249,14 @@ class Network:
     # ********** 
 
     def trace(self, r, s):
+        output = Path.Path()
+        
         # fill this in
-        return None
+    
+    
+    
+        
+        return output
         
     
     # **********
@@ -263,6 +282,9 @@ class Network:
     # calculate the all-or-nothing assignment
     def calculateAON(self):
         # fill this in
+        
+        
+        # if there is no demand from r to s, there may not be a path and calling trace() could crash. Check: if self.getDemand(r, s) > 0
         pass
 
 

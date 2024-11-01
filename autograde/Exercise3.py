@@ -8,7 +8,7 @@ from src import Network
 
     
 def test():
-    network = Network.Network("SiouxFalls")
+    network = Network.Network("Braess")
     
                 
     links = network.getLinks()
@@ -43,7 +43,7 @@ def test():
     for i in range(0, len(links)):
         print(str(links[i]) + "\t" + str(links[i].x))
 
-    network = Network.Network("SiouxFalls")
+    network = Network.Network("Braess")
 
     links = network.getLinks()
 
