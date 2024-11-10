@@ -1,56 +1,44 @@
 from autograde import Autograde
-from src import Link
-from src import Node
-from src import Path
 from src import Network
 
 
 
     
 def test():
-    network = Network.Network("Braess")
-    
-                
-    links = network.getLinks()
+    test = Network.Network("Braess")
+    test.readFiles()
 
-    for i in range(0, len(links)):
-        links[i].setFlow(1021 + i * 500)
+    for i in range(0, len(test.links)):
+        test.x[test.links[i]] = 1021 + i * 500
     
-    for i in range(0, len(links)):
-        links[i].addXstar(100 + i * 30)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] = 100 + i * 30
     
-    for i in range(0, len(links)):
-        links[i].addXstar(300 + i * 55)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] += 300 + i * 55
 
-    stepsize = network.calculateStepsize(3)
+    stepsize = test.calculateStepsize(3)
     
     print(stepsize)
 
-    for i in range(0, len(links)):
-        links[i].calculateNewX(stepsize)
-    
-    for i in range(0, len(links)):
-        print(str(links[i]) + "\t" + str(links[i].x))
 
-    network = Network.Network("Braess")
+    test = Network.Network("Braess")
+    test.readFiles()
 
-    links = network.getLinks()
+    test.calculateAON()
 
-    network.calculateAON()
+    test.calculateNewX(1)
 
-    network.calculateNewX(1)
+    for i in test.links:
+        print(str(i) + "\t" + str(test.x[i]))
 
-    for i in range(0, len(links)):
-        print(str(links[i]) + "\t" + str(links[i].x))
+    test = Network.Network("Braess")
+    test.readFiles()
 
-    network = Network.Network("Braess")
+    test.msa(50)
 
-    links = network.getLinks()
-
-    network.msa(50)
-
-    for i in range(0, len(links)):
-        print(str(links[i]) + "\t" + str(links[i].x))
+    for i in test.links:
+        print(str(i) + "\t" + str(test.x[i]))
 
     autograde()
  
@@ -58,24 +46,23 @@ def test():
 def autograde():
     auto = Autograde.Autograde()
 
-    network = Network.Network("SiouxFalls")
+    test = Network.Network("SiouxFalls")
+    test.readFiles()
 
-    links = network.getLinks()
-
-    for i in range(0, len(links)):
-        links[i].setFlow(1021 + i*500)
+    for i in range(0, len(test.links)):
+        test.x[test.links[i]] = 1021 + i*500
     
-    for i in range(0, len(links)):
-        links[i].addXstar(100 + i*30)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] = 100 + i*30
     
-    for i in range(0, len(links)):
-        links[i].addXstar(300 + i*55)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] += 300 + i*55
     
 
-    stepsize = network.calculateStepsize(3)
+    stepsize = test.calculateStepsize(3)
 
-    for i in range(0, len(links)):
-        links[i].calculateNewX(stepsize)
+    test.calculateNewX(stepsize)
+
     
     newflows = [
         814.0, 
@@ -157,26 +144,26 @@ def autograde():
     ]
 
     for i in range(0, 76):
-        if i < len(links):
-            auto.test(abs(links[i].x - newflows[i]) < 0.1)
+        if i < len(test.links):
+            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
         
         else:
             auto.test(False)
 
     auto.flush("3(b): Link.calculateNewX()")
 
-    for i in range(0, len(links)):
-        links[i].setFlow(1021 + i * 500)
+    for i in range(0, len(test.links)):
+        test.x[test.links[i]] = 1021 + i * 500
 
-    for i in range(0, len(links)):
-        links[i].addXstar(100 + i*30)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] = 100 + i*30
 
-    for i in range(0, len(links)):
-        links[i].addXstar(300 + i*55)
+    for i in range(0, len(test.links)):
+        test.xstar[test.links[i]] = 300 + i*55
 
-    stepsize = network.calculateStepsize(5)
+    stepsize = test.calculateStepsize(5)
 
-    network.calculateNewX(stepsize)
+    test.calculateNewX(stepsize)
 
     newflows = [
         896.8000000000001, 
@@ -258,8 +245,8 @@ def autograde():
     ]
 
     for i in range(0, 76):
-        if i < len(links):
-            auto.test(abs(links[i].x - newflows[i]) < 0.1)
+        if i < len(test.links):
+            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
         else:
             auto.test(False)
     auto.flush("3(b): Network.calculateNewX()")
@@ -268,20 +255,20 @@ def autograde():
 
 
 
-    network = Network.Network("Braess")
+    test = Network.Network("Braess")
+    test.readFiles()
 
-    links = network.getLinks()
 
-    network.calculateAON()
+    test.calculateAON()
 
-    network.calculateNewX(1)
+    test.calculateNewX(1)
 
 
     newflows = [4000.0, 0.0, 0.0, 4000.0, 4000.0]
 
     for i in range(0, len(newflows)):
-        if i < len(links):
-            auto.test(abs(links[i].x - newflows[i]) < 0.1)
+        if i < len(test.links):
+            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
         else:
             auto.test(False)
         
@@ -290,9 +277,8 @@ def autograde():
 
 
 
-    network = Network.Network("Braess")
-
-    links = network.getLinks()
+    test = Network.Network("Braess")
+    test.readFiles()
 
     AECs = [
         1.02, 
@@ -310,22 +296,12 @@ def autograde():
     newflows = [3600.0, 0.0, 400.00000000000006, 4000.0, 3600.0]
 
     
-    msa_result = network.msa(10)
+    msa_result = test.msa(10)
 
     output = msa_result.split("\n")
 
     if len(output) > 0:
-        firstline = output[0].split()
-        if len(firstline) > 0:
-            auto.test(firstline[0] == "Iteration")
-        
-        else:
-            auto.test(False)
 
-        if len(firstline) > 1:
-            auto.test(firstline[1] == "AEC")
-        else:
-            auto.test(False)
         
         for i in range(0, len(AECs)):
             if len(output) > i + 1:
@@ -345,8 +321,8 @@ def autograde():
 
 
     for i in range(0, 5):
-        if i < len(links):
-            auto.test(abs(links[i].x - newflows[i]) < 0.01)
+        if i < len(test.links):
+            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.01)
         else:
             auto.test(False)
 

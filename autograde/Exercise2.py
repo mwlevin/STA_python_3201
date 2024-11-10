@@ -1,7 +1,4 @@
 from autograde import Autograde
-from src import Link
-from src import Node
-from src import Path
 from src import Network
 
 
@@ -10,48 +7,45 @@ def test():
     
     
     
-    network = Network.Network("SiouxFalls")
+    test = Network.Network("SiouxFalls")
+    test.readFiles()
+
         
-        
-    zones = network.getZones()
-    nodes = network.getNodes()
-    links = network.getLinks()
-        
-    for i in range(0, len(links)):
-        links[i].setFlow(1021 + i*500)
+    for i in test.links:
+        test.x[i] = 1021 + i*500
     
-        
-    path = Path.Path()
-    if len(links) > 13:
-        path.add(links[0])
-        path.add(links[3])
-        path.add(links[14])
-        path.add(links[12])
+    path = []
+    
+    if len(test.links) > 13:
+        path.append(test.links[0])
+        path.append(test.links[3])
+        path.append(test.links[14])
+        path.append(test.links[12])
          
         
         
-        path2 = Path.Path()
+        path2 = []
         
-        if len(links) > 4:
+        if len(test.links) > 4:
             for i in range(0, 4):
-                path2.add(links[i])
+                path2.append(test.links[i])
 
         
-        if len(nodes) > 0:
+        if len(test.nodes) > 0:
         
-            network.dijkstras(nodes[0])
+            cost, pred = test.dijkstras(1)
 
-            for i in range(0, len(nodes)):
-                msg = str(nodes[i]) + " " + str(nodes[i].cost)
-                msg += " " + str(nodes[i].predecessor)
+            for i in range(0, len(test.nodes)):
+                msg = str(i+1) + " " + str(cost[i+1])
+                msg += " " + str(pred[i+1])
                 print(msg)
-                print(network.trace(nodes[0], nodes[i]))
+                print(test.trace(1, i+1))
 
-            network.dijkstras(nodes[0])
+            cost, pred = test.dijkstras(1)
 
-            for i in range(0, len(nodes)):
-                msg = "Path from " + str(nodes[0]) + " to " + str(nodes[i])
-                msg += ": " + str(network.trace(nodes[0], nodes[i]))
+            for i in range(0, len(test.nodes)):
+                msg = "Path from " + str(1) + " to " + str(i+1)
+                msg += ": " + str(test.trace(1, i+1))
                 print(msg)
 
     autograde()
@@ -65,12 +59,9 @@ def autograde():
 
 
 
-    network = Network.Network("SiouxFalls")
+    test = Network.Network("SiouxFalls")
+    test.readFiles()
 
-
-    zones = network.getZones()
-    nodes = network.getNodes()
-    links = network.getLinks()
 
     flowdata = [
         [0, 1, 2],
@@ -153,84 +144,83 @@ def autograde():
 
     for r in range(0, len(flowdata)):
         i = flowdata[r][0]
-        startid = flowdata[r][1]
-        endid = flowdata[r][2]
+        start = flowdata[r][1]
+        end = flowdata[r][2]
 
-        start = network.findNode(startid)
-        end = network.findNode(endid)
-
-        if start is not None and end is not None:
-            link = network.findLink(start, end)
-
-            if link is not None:
-                link.setFlow(1021 + i*500)
+        test.x[(start,end)] = 1021 + i*500
             
-    path = Path.Path()
+    path = []
 
-    if len(links) > 12:
-        path.add(links[0])
-        path.add(links[3])
-        path.add(links[14])
-        path.add(links[12])
+    if len(test.links) > 12:
+        path.append(test.links[0])
+        path.append(test.links[3])
+        path.append(test.links[14])
+        path.append(test.links[12])
     
 
 
-    path2 = Path.Path()
+    path2 = []
 
-    if len(links) > 4:
+    if len(test.links) > 4:
         for i in range(0, 4):
-            path2.add(links[i])
+            path2.append(test.links[i])
 
     
 
 
 
-    auto.test(abs(path.getTravelTime() - 24.37569064685568) < 0.01)
-    auto.test(abs(path2.getTravelTime() - 21.050172255908606) < 0.01)   
+    auto.test(abs(test.getPathTravelTime(path) - 24.37569064685568) < 0.01)
+    auto.test(abs(test.getPathTravelTime(path) - 21.050172255908606) < 0.01)   
 
 
     auto.flush("2(a): Path.getTravelTime()")
 
-    for n in nodes:
-        n.cost = 1;
-        n.predecessor = n;
 
-    if len(nodes) > 20:
-        network.dijkstras(nodes[20])
-        auto.test(nodes[20].predecessor is None)
-
+    cost = {i: -1 for i  in test.nodes}
+    pred = {i:None for i in test.nodes}
+    
+    if len(test.nodes) > 20:
+        cost, pred = test.dijkstras(20)
+        auto.test(20 in pred and pred[20] is None)
+    else:
+        auto.test(False)
+        
     for i in range(1, 24):
-        if i < len(nodes):
+        if i in cost:
             if i == 20:
-                auto.test(nodes[i].cost == 0)
+                auto.test(cost[i] == 0)
             else:
-                auto.test(nodes[i].cost > 1) 
+                auto.test(cost[i] > 1) 
         else:
             auto.test(False)
 
-    for n in nodes:
-        n.cost = 1
-        n.predecessor = n
-        
-    if len(nodes) > 10:
-        network.dijkstras(nodes[10])
-        auto.test(nodes[10].predecessor is None)
+
+    cost = {i: -1 for i  in test.nodes}
+    pred = {i:None for i in test.nodes}
+    
+    if len(test.nodes) > 10:
+        cost, pred = test.dijkstras(10)
+        auto.test(pred[10] is None)
+    else:
+        auto.test(False)
     
     for i in range(1, 24):
-        if i < len(nodes):
+        if i in cost:
             if i == 10:
-                auto.test(nodes[i].cost == 0)
-            
+                auto.test(cost[i] == 0)
+
             else:
-                auto.test(nodes[i].cost > 1)
+                auto.test(cost[i] > 1)
         else:
-            auto.test(False);
+            auto.test(False)
 
     auto.flush("2(b): Dijkstra's initialization")
 
 
-    if len(nodes) > 0:
-        network.dijkstras(nodes[0])
+    cost = {i: -1 for i  in test.nodes}
+    pred = {i:None for i in test.nodes}
+    if len(test.nodes) > 0:
+        cost, pred = test.dijkstras(1)
     
 
     costs = [
@@ -261,13 +251,17 @@ def autograde():
     ]
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(abs(costs[i] - nodes[i].cost) < 0.01)
+        if i in cost:
+            auto.test(abs(costs[i] - cost[i]) < 0.01)
         else:
             auto.test(False)
-
-    if len(nodes) > 10:
-        network.dijkstras(nodes[10])
+    
+    
+    cost = {i: -1 for i  in test.nodes}
+    pred = {i:None for i in test.nodes}
+    
+    if len(test.nodes) > 10:
+        cost, pred = test.dijkstras(11)
 
     costs = [
         30.561574457187128, 
@@ -297,8 +291,8 @@ def autograde():
     ]
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(abs(costs[i] - nodes[i].cost) < 0.01)
+        if i in cost:
+            auto.test(abs(costs[i] - cost[i]) < 0.01)
         
         else:
             auto.test(False)
@@ -306,29 +300,31 @@ def autograde():
     auto.flush("2(b): Dijkstra's cost labels")
 
 
-
-    if len(nodes) > 0:
-        network.dijkstras(nodes[0])
+    cost = {i: -1 for i  in test.nodes}
+    pred = {i:None for i in test.nodes}
+    
+    if len(test.nodes) > 0:
+        cost, pred = test.dijkstras(1)
     
 
-    preds = [-1, 1, 1, 3, 4, 2, 8, 6, 5, 9, 4, 3, 12, 11, 10, 18, 10, 7, 15, 18, 22, 15, 14, 13]
+    preds = [None, 1, 1, 3, 4, 2, 8, 6, 5, 9, 4, 3, 12, 11, 10, 18, 10, 7, 15, 18, 22, 15, 14, 13]
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(nodes[i].predecessor == network.findNode(preds[i]))
+        if i in pred:
+            auto.test(pred[i] == preds[i])
         
         else:
         
             auto.test(False)
 
-    preds = [3, 6, 4, 5, 9, 5, 8, 6, 10, 11, -1, 3, 12, 11, 10, 18, 10, 7, 15, 18, 22, 15, 14, 13]
+    preds = [3, 6, 4, 5, 9, 5, 8, 6, 10, 11, None, 3, 12, 11, 10, 18, 10, 7, 15, 18, 22, 15, 14, 13]
 
-    if len(nodes) > 10:
-        network.dijkstras(nodes[10])
+    if len(test.nodes) > 10:
+        test.dijkstras(11)
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(nodes[i].predecessor == network.findNode(preds[i]))
+        if i in pred:
+            auto.test(pred[i] == preds[i])
         
         else:
             auto.test(False)
@@ -363,12 +359,12 @@ def autograde():
     ]
         
  
-    if len(nodes) > 0:
-        network.dijkstras(nodes[0]);
+    if len(test.nodes) > 0:
+        test.dijkstras(1)
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(str(network.trace(nodes[0], nodes[i])) == traces[i])
+        if i < len(test.nodes):
+            auto.test(str(test.trace(1, i+1)) == traces[i])
         else:
             auto.test(False)
 
@@ -396,12 +392,12 @@ def autograde():
     ]
 
 
-    if len(nodes) > 10:
-        network.dijkstras(nodes[10]);
+    if len(test.nodes) > 10:
+        test.dijkstras(11)
 
     for i in range(0, 24):
-        if i < len(nodes):
-            auto.test(str(network.trace(nodes[10], nodes[i])) == traces[i])
+        if i < len(test.nodes):
+            auto.test(str(test.trace(11, i+1)) == traces[i])
         
         else:  
             auto.test(False)
@@ -437,14 +433,16 @@ def autograde():
         158.61247346764176
     ]
 
-    if len(nodes) > 0:
-        network.dijkstras(nodes[0])
+
+    
+    if len(test.nodes) > 0:
+        cost, pred = test.dijkstras(1)
     
     for i in range(0, 24):
-        if i < len(nodes):
-            traced = network.trace(nodes[0], nodes[i])
+        if i < len(test.nodes):
+            traced = test.trace(0, i+1)
             if traced is not None:
-                auto.test(abs(traced.getTravelTime() - costs[i]) < 0.01)
+                auto.test(abs(test.getPathTravelTime(traced) - costs[i]) < 0.01)
             else:
                 auto.test(False)
         else:
@@ -477,14 +475,14 @@ def autograde():
         181.1738706369596
     ]
 
-    if len(nodes) > 10:
-        network.dijkstras(nodes[10])
+    if len(test.nodes) > 10:
+        test.dijkstras(11)
     
     for i in range(0, 24):
-        if i < len(nodes):
-            traced = network.trace(nodes[10], nodes[i])
+        if i < len(test.nodes):
+            traced = test.trace(11, i+1)
             if traced is not None:
-                auto.test(abs(traced.getTravelTime() - costs[i]) < 0.01)
+                auto.test(abs(test.getPathTravelTime(traced) - costs[i]) < 0.01)
             else:
                 auto.test(False)
         else:

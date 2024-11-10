@@ -6,7 +6,7 @@ from autograde import Exercise3
 
 
 if __name__ == '__main__':
-    Exercise1.test()
+    #Exercise1.test()
     #Exercise2.test()
-    #Exercise3.test()
+    Exercise3.test()
     

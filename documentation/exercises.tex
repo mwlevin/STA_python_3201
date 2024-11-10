@@ -93,19 +93,16 @@ We will use $(i,j)$ to refer to a link from node $i$ to node $j$, with $\A$ the 
 	t_{ij}(x_{ij}) = \tff \left(1+\alpha_{ij} \left(\frac{x_{ij}}{C_{ij}}\right)^{\beta_{ij}}\right) \label{bpr}
 \end{equation}
  where $\tff$ is the free flow travel time, $C_{ij}$ is the link capacity, and $\alpha_{ij}$ and $\beta_{ij}$ are calibration constants.
-You will see some variables \texttt{x}, \texttt{t\_ff}, \texttt{C}, \texttt{alpha}, and \texttt{beta} defined in the function \texttt{\_\_init\_\_()}. These variables are available for use anywhere within the \texttt{Link} class by using the \href{https://www.w3schools.com/python/gloss_python_self.asp}{``\texttt{self}'' reference}, and they contain the values you need. (These values have either been specified or read from one of the data files.)
+You will see some variables \texttt{x}, \texttt{t\_ff}, \texttt{C}, \texttt{alpha}, and \texttt{beta} defined in the function \texttt{\_\_init\_\_()} of the \texttt{Network} class. These variables are available for use anywhere within the \texttt{Network} class by using the \href{https://www.w3schools.com/python/gloss_python_self.asp}{``\texttt{self}'' reference}, and they contain the values you need. (These values have either been specified or read from one of the data files.) For example, to get the free flow travel time of the link from node 1 to node 2, you would write \texttt{self.t\_ff[(1,2)]}.
 
-Within the \texttt{Link} class in Link.py, find the function labeled \texttt{getTravelTime()}. It defines a variable \texttt{t\_{ij}} and sets the value to 0.0 --- a floating-point number. You need to calculate the correct value of $t_{ij}(x_{ij})$ and assign it to variable \texttt{t\_ij}. 
+Within the \texttt{Network} class in Network.py, find the function labeled \texttt{getTravelTime()}. You need to calculate the correct value of $t_{ij}(x_{ij})$ and return it.
 
 
 It may help to look at  \href{https://www.w3schools.com/python/python_syntax.asp}{Python syntax},  \href{https://www.w3schools.com/python/python_variables.asp}{variables} and \href{https://www.w3schools.com/python/python_datatypes.asp}{data types}. For math calculations, it may help to look at tutorials on \href{https://www.w3schools.com/python/python_operators.asp}{operators} and the \href{https://www.w3schools.com/python/python_math.asp}{math functions}. 
 
-\begin{center}
-	\includegraphics[width=0.3\textwidth]{netbeans3.png}
-\end{center}
 
 \noindent Open main.py and ensure that it will run \texttt{Exercise1.test()}.
-Open autograde/Exercise1.py. The \texttt{main()} method constructs two instances of the \texttt{Link} class with different parameters. The first link has $t^{\mathrm{ff}}_{1}=10$, $C_{1}=2580$, $\alpha_{1}=0.15$, and $\beta_{1}=4$. The second link $t^{\mathrm{ff}}_{2}=12$, $C_{2}=1900$, $\alpha_{2}=0.35$, and $\beta_{2}=2$. The \texttt{main()} function then prints the calculation of $t_{ij}$ with $x_{1}=1230.2$, $x_2=570$, $x_1=0$, and $x_2=2512$. You should compare the values calculated by your code with values that you have computed by hand. 
+Open autograde/Exercise1.py. The \texttt{main()} method constructs two links with different parameters. The first link has $t^{\mathrm{ff}}_{1}=10$, $C_{1}=2580$, $\alpha_{1}=0.15$, and $\beta_{1}=4$. The second link $t^{\mathrm{ff}}_{2}=12$, $C_{2}=1900$, $\alpha_{2}=0.35$, and $\beta_{2}=2$. The \texttt{main()} function then prints the calculation of $t_{ij}$ with $x_{1}=1230.2$, $x_2=570$, $x_1=0$, and $x_2=2512$. You should compare the values calculated by your code with values that you have computed by hand. 
 Afterwards, \texttt{test()} calls the \texttt{autograde()} function, which runs an automated test of your answers. 
 
 
@@ -114,10 +111,10 @@ Afterwards, \texttt{test()} calls the \texttt{autograde()} function, which runs 
 \begin{align}
 	TSTT = \sum_{(i,j)\in\A} x_{ij} t_{ij}(x_{ij})
 \end{align}
-The value for $x_{ij}$ is available from a variable in the Link class, and you wrote the method for $t_{ij}(x_{ij})$ in Exercise 1(a).
+The value for $x_{ij}$ is available from the variable \texttt{self.x}, and you wrote the method for $t_{ij}(x_{ij})$ in Exercise 1(a).
 %
 It may be helpful to look at tutorials on \href{https://www.w3schools.com/python/python_conditions.asp}{\texttt{if} statements}
- and \href{https://www.w3schools.com/python/python_for_loops.asp}{for loops} here.  Also, we are working with object-oriented programming, so it may be helpful to read the tutorial on \href{https://www.w3schools.com/python/python_classes.asp}{classes} to understand the interactions between the code. We will not ask you to implement any specific object-oriented code, but you will be working with \texttt{Node}, \texttt{Link}, and \texttt{Path} objects.
+ and \href{https://www.w3schools.com/python/python_for_loops.asp}{for loops} here.  
 
 
 \vspace\baselineskip
@@ -166,33 +163,23 @@ We need to implement a shortest path algorithm, which will be used as a step in 
 
 \noindent This may be your first time implementing pseudocode, so we will break it down into steps. The first is the initialization. In line \ref{line1}, we start looping through all nodes in set $\N$. Within this loop, set $V(n) \leftarrow \infty$. The operator $\leftarrow$ is used to indicate that $V(n)$ is assigned the value $\infty$, which \href{https://www.w3schools.com/python/ref_math_inf.asp}{exists in python}. $P(n)$ is assigned the value $\emptyset$, or \texttt{None} in Python, i.e. $P(n)$ is initialized to not be any specific node. After the loop, in line \ref{line6} we set $c_r\leftarrow 0$. Recall that $r$ is the origin parameter to Dijkstra's, so $r$ is the starting point. Therefore the shortest path from $r$ to $r$ has cost $0$. Finally, in line \ref{line7} we construct the set $Q\subseteq\N$ which contains the unsettled nodes. 
 
-Next, we enter the main loop in line \ref{line8}. This loop continues while $Q$ is non-empty --- while there is an unsettled node that we need to visit. Line \ref{line9} is written very simply, but can actually require more extensive code. Finding the $\argmin_{n\in Q} \left\{V(n)\right\}$ could involve looping through all elements of $Q$ to find the $n$ with the smallest value of $V(n)$. Save that node and store it in variable $u$. Once you have determined $u$, remove it from $Q$. Then loop through all outgoing links $(u,v)$ in line \ref{line10}. The function \texttt{getOutgoing()} of the \texttt{Node} class which you implemented previously will be useful here. In line \ref{line11}, notice that while $c_u$ and $c_v$ will be variables, $t_{uv}$ is a function call to \texttt{getTravelTime()} of the \texttt{Link} class. Line \ref{line14} requires adding node $u$ to set $Q$. Beware of adding multiple copies of $u$ to your implementation of $Q$, which is possible with some data structures (such as lists). Instead, use a \href{https://www.w3schools.com/python/python_sets.asp}{python set} to implement the set $Q$. If done correctly, $Q$ will eventually become empty, and the algorithm will terminate after calculating $V(n)$ and $P(n)$ for all nodes. 
+Next, we enter the main loop in line \ref{line8}. This loop continues while $Q$ is non-empty --- while there is an unsettled node that we need to visit. Line \ref{line9} is written very simply, but can actually require more extensive code. Finding the $\argmin_{n\in Q} \left\{V(n)\right\}$ could involve looping through all elements of $Q$ to find the $n$ with the smallest value of $V(n)$. Save that node and store it in variable $u$. Once you have determined $u$, remove it from $Q$. Then loop through all outgoing links $(u,v)$ in line \ref{line10}. The function \texttt{getOutgoing()}  will be useful here. In line \ref{line11}, notice that while $c_u$ and $c_v$ will be variables, $t_{uv}$ is a function call to \texttt{getTravelTime()}.
+
+
+ Line \ref{line14} requires adding node $u$ to set $Q$. Beware of adding multiple copies of $u$ to your implementation of $Q$, which is possible with some data structures (such as lists). Instead, use a \href{https://www.w3schools.com/python/python_sets.asp}{python set} to implement the set $Q$. If done correctly, $Q$ will eventually become empty, and the algorithm will terminate after calculating $V(n)$ and $P(n)$ for all nodes. 
 
 
 
 
 
-
-We will start our implementation of Dijkstra's by implementing a data structure to store a path. 
-A \texttt{Path} is an ordered list of \texttt{Link}s. Open Path.py. A \texttt{Path} contains a list of links and includes the following functions:
-\begin{itemize}
-	\item \texttt{add()}: add a link to the end of the list.
-	\item \texttt{addFront()}: add a link to the front of the list.
-\end{itemize}
-You will need some of these when constructing a \texttt{Path} to store the shortest path. The \texttt{Path} class is useful because it 
- defines five additional functions to perform calculations on the path:
-\begin{itemize}
-	\item \texttt{isConnected()} checks whether the list of links is a valid path. For instance, the list \texttt{[(1,3), (3, 7), (7, 8)]} is a connected path, but the list \texttt{[(1,3), (2, 4), (4, 8)]} is not.
-	\item  \texttt{getSource()} and \texttt{getDest()} return the origin and destination nodes of the path, respectively.
-	\item \texttt{getTravelTime()} calculates the travel time for the path.
-	\item \texttt{addHstar()} will be used later.
-\end{itemize}
 
 
 \paragraph*{Exercise 2(a)} 
 \begin{itemize}
-	\item Open Path.py. 
-	 Implement the \texttt{getTravelTime()} function, which returns $T^\pi = \sum_{(i,j)\in\pi} t_{ij}(x_{ij})$. Intuitively, the travel time on the path is the sum of the travel times of the links that comprise the path. You will need to use the link travel time function from Exercise 1(a).
+	\item Open Network.py. A path is a list of links, e.g. \texttt{[(1,2), (2,3)]}.
+	
+	
+	 Implement the \texttt{getPathTravelTime()} function, which returns $T^\pi = \sum_{(i,j)\in\pi} t_{ij}(x_{ij})$. Intuitively, the travel time on the path is the sum of the travel times of the links that comprise the path. You will need to use the link travel time function from Exercise 1(a).
 \end{itemize}
 
 
@@ -201,7 +188,7 @@ You will need some of these when constructing a \texttt{Path} to store the short
 
 \noindent
 To implement Dijkstra's, we need two additional variables $V(n)$ and $P(n)$.
-Open Node.py. You will see that the instance variables \texttt{cost} (representing $V(n)$) and \texttt{predecessor} (representing $P(n)$) have already been created for you.
+These are defined in Dijkstra's as \texttt{cost} (representing $V(n)$) and \texttt{pred} (representing $P(n)$), and need to be returned at the end of Dijkstra's.
 
 % 6b dijkstra's initialization
 
@@ -215,7 +202,7 @@ You may wish to test the correctness of the initialization using the autograde b
 \vspace{\baselineskip}
 
 \noindent
-After executing Dijkstra's algorithm, we now have all the information needed to find the shortest path from $r$ to $s$ through the predecessor labels. We need to convert those predecessor labels into an instance of the \texttt{Path} class created earlier. This can be accomplished through the trace algorithm shown below. Essentially, start at $s$, and follow the predecessor labels until reaching $r$, adding each link to the path as you go. 
+After executing Dijkstra's algorithm, we now have all the information needed to find the shortest path from $r$ to $s$ through the predecessor labels. We need to convert those predecessor labels into a path. This can be accomplished through the trace algorithm shown below. Essentially, start at $s$, and follow the predecessor labels until reaching $r$, adding each link to the path as you go. 
 
 \vspace{\baselineskip}
 
@@ -236,7 +223,7 @@ After executing Dijkstra's algorithm, we now have all the information needed to 
 %\vspace{\baselineskip}
 
 \paragraph*{Exercise 2(d)} Open Network.py. Implement the \texttt{trace()} function in the \texttt{Network} class. 
-It may be useful to add the links in the correct order to ensure a connected path, which can be checked afterwards by the \texttt{isConnected()} function of the \texttt{Path} class.
+It may be useful to add the links in the correct order to ensure a connected path, which can be checked afterwards by the \texttt{isConnected()} function in the \texttt{Network} class.
 
  \vspace{\baselineskip}
  
@@ -301,23 +288,21 @@ The algorithm is specified below in pseudocode:
 \begin{itemize}
 
 	
-	\item Open Network.py. Implement the \texttt{calculateAON()} function in the \texttt{Network} class, which is the loop in lines \ref{msa6}--\ref{msa14}. 
+	\item Open Network.py. Implement the \texttt{calculateAON()} function in the \texttt{Network} class, which is the loop in lines \ref{msa6}--\ref{msa14} to calculate $x^\star_{ij}$. It may be helpful to use the \texttt{xstar} variable defined in the \texttt{Network} class to store your all-or-nothing calculation.
 
 \end{itemize}
 
 
 \paragraph*{Exercise 3(b)} 
 \begin{itemize}
-	\item Open Link.py. Notice that there is an instance variable to store $x^\star_{ij}$ in the \texttt{Link} class and a \texttt{addXstar()} function which adds the specified flow to the $x^\star_{ij}$ variable.
-	It will be used to implement line \ref{msa11}. 
 	
-	
-	
-	\item Open Link.py. In the \texttt{Link} class, implement the \texttt{calculateNewX()} function, which takes as input $\lambda$ and implements lines \ref{msa17} and \ref{msa18}. 
 	
 	\item Open Network.py. In the \texttt{Network} class, implement the \texttt{calculateStepsize()} function, which determines the value of $\lambda$ in line \ref{msa15}. 
 	
-	\item Open Network.py again, and implement the \texttt{calculateNewX()} function of the \texttt{Network} class, which implements the loop in line \ref{msa16} by calling the \texttt{Link.calculateNewX()} function on every link in the network.
+	\item Open Network.py again, and implement the \texttt{calculateNewX()} function of the \texttt{Network} class, which calculates
+	$$
+	x_{ij} \leftarrow (1-\lambda) x_{ij} + \lambda x^\star_{ij}
+	$$
 \end{itemize}
 
 
