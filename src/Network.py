@@ -21,8 +21,6 @@ class Network:
         # flow on link
         self.x = dict()
         
-        # this might be useful for storing xstar
-        self.xstar = dict()
         
         # list of zones, each zone is an integer id
         self.zones = []
@@ -98,7 +96,6 @@ class Network:
         
         for i in self.links:
             self.x[i] = 0
-            self.xstar[i] = 0
         
     def readTrips(self, tripsFile):
 
@@ -183,8 +180,8 @@ class Network:
         
         
         # fill this in
+
         return 0
-        
  
     # **********
     # Exercise 1(b)
@@ -196,13 +193,14 @@ class Network:
         
         
         
-        
     # **********
     # Exercise 2(a)
     # **********     
     def getPathTravelTime(self, path):
         # path is a list of links
         # each link is a tuple e.g. (1,2)
+        
+        # fill this in
         return 0
         
         
@@ -244,17 +242,18 @@ class Network:
    
         
         
-        
+    # pred should be the predecessor node
     def dijkstras(self, origin):
         cost = {i:0 for i in self.nodes}
         pred = {i:None for i in self.nodes}
-        
         
         # **********
         # Exercise 2(b)
         # ********** 
 
         # fill this in
+        
+        
 
         # **********
         # Exercise 2(c)
@@ -262,9 +261,7 @@ class Network:
         
         # fill this in
         
-        
-        
-        
+        #print(cost)
         
         return cost, pred
   
@@ -272,14 +269,13 @@ class Network:
     # Exercise 2(d)
     # ********** 
 
-    def trace(self, r, s):
+    def trace(self, r, s, pred):
         output = []
         # add links to path!
         
+        
         # fill this in
-    
-    
-    
+        
         
         return output
     
@@ -289,11 +285,18 @@ class Network:
     # ********** 
     # calculate the all-or-nothing assignment
     def calculateAON(self):
+        
+        
+        xstar = {a:0 for a in self.links}
+        
         # fill this in
         # I recommend checking whether r to s demand > 0; if not, don't run shortest path.
-        
         # if there is no demand from r to s, there may not be a path and calling trace() could crash. Check: if self.getDemand(r, s) > 0
-        pass    
+        
+        
+        
+    
+        return xstar   
     
     # **********
     # Exercise 3(b)
@@ -308,11 +311,11 @@ class Network:
     # Exercise 3(b)
     # ********** 
     # calculate the new X for all links based on the given step size
-    def calculateNewX(self, stepsize):
+    def calculateNewX(self, xstar, stepsize):
+        newX = {a:0 for a in self.links}
         # fill this in
-        pass
 
-    
+        return newX
 
 
     def msa(self, max_iteration):
@@ -324,10 +327,8 @@ class Network:
             # **********
             # Exercise 3(c)
             # ********** 
-            
-            
-            
-            
+
+
             
             # how far are we from UE?
             aec = self.getAEC()
