@@ -7,15 +7,13 @@ from src import Network
 def test():
     test = Network.Network("Braess")
     test.readFiles()
+    
+    
+    xstar = dict()
 
     for i in range(0, len(test.links)):
         test.x[test.links[i]] = 1021 + i * 500
     
-    for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] = 100 + i * 30
-    
-    for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] += 300 + i * 55
 
     stepsize = test.calculateStepsize(3)
     
@@ -25,9 +23,9 @@ def test():
     test = Network.Network("Braess")
     test.readFiles()
 
-    test.calculateAON()
+    xstar = test.calculateAON()
 
-    test.calculateNewX(1)
+    newX = test.calculateNewX(xstar, stepsize)
 
     for i in test.links:
         print(str(i) + "\t" + str(test.x[i]))
@@ -52,16 +50,18 @@ def autograde():
     for i in range(0, len(test.links)):
         test.x[test.links[i]] = 1021 + i*500
     
-    for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] = 100 + i*30
+    xstar = dict()
     
     for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] += 300 + i*55
+        xstar[test.links[i]] = 100 + i*30
+    
+    for i in range(0, len(test.links)):
+        xstar[test.links[i]] += 300 + i*55
     
 
     stepsize = test.calculateStepsize(3)
 
-    test.calculateNewX(stepsize)
+    newX = test.calculateNewX(xstar, stepsize)
 
     
     newflows = [
@@ -145,7 +145,7 @@ def autograde():
 
     for i in range(0, 76):
         if i < len(test.links):
-            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
+            auto.test(abs(newX[test.links[i]] - newflows[i]) < 0.1)
         
         else:
             auto.test(False)
@@ -156,14 +156,14 @@ def autograde():
         test.x[test.links[i]] = 1021 + i * 500
 
     for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] = 100 + i*30
+        xstar[test.links[i]] = 100 + i*30
 
     for i in range(0, len(test.links)):
-        test.xstar[test.links[i]] = 300 + i*55
+        xstar[test.links[i]] += 300 + i*55
 
     stepsize = test.calculateStepsize(5)
 
-    test.calculateNewX(stepsize)
+    newX = test.calculateNewX(xstar, stepsize)
 
     newflows = [
         896.8000000000001, 
@@ -246,7 +246,7 @@ def autograde():
 
     for i in range(0, 76):
         if i < len(test.links):
-            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
+            auto.test(abs(newX[test.links[i]] - newflows[i]) < 0.1)
         else:
             auto.test(False)
     auto.flush("3(b): Network.calculateNewX()")
@@ -259,16 +259,16 @@ def autograde():
     test.readFiles()
 
 
-    test.calculateAON()
+    xstar = test.calculateAON()
 
-    test.calculateNewX(1)
+    newX = test.calculateNewX(xstar, 1)
 
 
     newflows = [4000.0, 0.0, 0.0, 4000.0, 4000.0]
 
     for i in range(0, len(newflows)):
         if i < len(test.links):
-            auto.test(abs(test.x[test.links[i]] - newflows[i]) < 0.1)
+            auto.test(abs(newX[test.links[i]] - newflows[i]) < 0.1)
         else:
             auto.test(False)
         

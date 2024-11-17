@@ -32,9 +32,8 @@ def test():
     
     network = Network.Network("SiouxFalls")
                 
-        
-    for i in test.links:
-        test.x[i] = 1021 + i * 500
+    for i in range(0, len(test.links)):
+        test.x[test.links[i]] = 1021 + i * 500
         
     print("TSTT", test.getTSTT())
  
@@ -59,16 +58,16 @@ def autograde():
     
     test.x[(1,2)] = 1320.2
     test.x[(2,3)] = 570
-    auto.test(abs(test.getTravelTime((1,2)) - 10.077538130554997) < 0.01)
+    auto.test(abs(test.getTravelTime((1,2)) - 10.102842197719283) < 0.01)
 
-    auto.test(abs(test.getTravelTime((2,3)) - 12.378) < 0.01)
+    auto.test(abs(test.getTravelTime((2,3)) - 12.034019999999998) < 0.01)
         
     test.x[(1,2)] = 0
     test.x[(2,3)] = 2512
         
 
-    auto.test(abs(test.getTravelTime([(1,2)]) - 10.0) < 0.01)
-    auto.test(abs(test.getTravelTime((2,3)) - 19.341441772853184) < 0.01)
+    auto.test(abs(test.getTravelTime((1,2)) - 10.0) < 0.01)
+    auto.test(abs(test.getTravelTime((2,3)) - 24.832563643855647) < 0.01)
     
     auto.flush("1(a): Link.getTravelTime()"); 
     
@@ -80,7 +79,7 @@ def autograde():
 
 
     for i in range(0, len(test.links)):
-        test.x[i] = 1021 + i * 500
+        test.x[test.links[i]] = 1021 + i * 500
     
     auto.test(abs(test.getTSTT() - 8.007500975406816E8) < 1)
 
